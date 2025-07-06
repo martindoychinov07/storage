@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: sales-postgres
+    environment:
+      POSTGRES_DB: sales
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your-pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - sales-network
+
+  sales-app:
+    build: .
+    container_name: sales-app
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: your-pass
+    ports:
+      - "8081:8081"
+    networks:
+      - sales-network
+
+volumes:
+  pgdata:
+
+networks:
+  sales-network:
