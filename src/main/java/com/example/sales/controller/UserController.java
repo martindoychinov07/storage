@@ -44,8 +44,14 @@ public class UserController {
         userService.changeUsername(username);
     }
 
+    @PostMapping("/type")
+    public Optional<String> getUserType(@RequestBody String username) {
+        return userService.getUserType(username);
+    }
+
     @PostMapping("/")
-    public Optional<User> getUserById(@RequestBody Long id) {
+    public Optional<User> getUserById(@RequestBody String idStr) {
+        Long id = Long.parseLong(idStr.trim());
         return userService.getUserById(id);
     }
 }
