@@ -101,6 +101,7 @@ public class UserService {
         userRepository.delete(dbUser);
 
         session.invalidate();
+
         return ResponseEntity.ok("User deleted successfully");
     }
 
@@ -148,6 +149,12 @@ public class UserService {
         Long userId = Optional.of((Long) session.getAttribute("userId")).orElseThrow(() ->
                 new UserAlreadyLoggedOutException("User logged out")
         );
+
+        User oldUser = userRepository.findByUsername(String.valueOf(newUsername));
+
+        if (oldUser != null) {
+            throw new UserExistsException("There is such a user already");
+        }
 
         User user = userRepository.findByUsername(String.valueOf(username));
 
