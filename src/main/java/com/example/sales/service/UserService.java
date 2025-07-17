@@ -101,10 +101,7 @@ public class UserService {
         userRepository.delete(dbUser);
 
         session.invalidate();
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.TEXT_PLAIN)
-                .body("User deleted successfully");
+        return ResponseEntity.ok("User deleted successfully");
     }
 
     public boolean isLoggedIn() {
@@ -125,7 +122,7 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public void changePassword(String newPassword) throws UserAlreadyLoggedOutException {
+    public ResponseEntity<String> changePassword(String newPassword) throws UserAlreadyLoggedOutException {
         String username = Optional.of((String) session.getAttribute("username")).orElseThrow(() ->
                 new UserAlreadyLoggedOutException("User logged out")
         );
@@ -139,12 +136,15 @@ public class UserService {
 
         user.setPassword(encodedPassword);
         userRepository.save(user);
+
+        return ResponseEntity.ok("Successfully changed password");
     }
 
-    public void changeUsername(String newUsername) throws UserAlreadyLoggedOutException {
+    public ResponseEntity<String> changeUsername(String newUsername) throws UserAlreadyLoggedOutException {
         String username = Optional.of((String) session.getAttribute("username")).orElseThrow(() ->
                 new UserAlreadyLoggedOutException("User logged out")
         );
+        
         Long userId = Optional.of((Long) session.getAttribute("userId")).orElseThrow(() ->
                 new UserAlreadyLoggedOutException("User logged out")
         );
@@ -158,6 +158,8 @@ public class UserService {
         user.setUsername(newUsername);
         userRepository.save(user);
         logout();
+
+        return ResponseEntity.ok("Successfully changed username");
     }
 
     public Optional<String> getUserRole(String username) {

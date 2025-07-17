@@ -3,6 +3,7 @@ package com.example.sales.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.sales.exception.UserAlreadyLoggedOutException;
@@ -25,29 +26,29 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public void logUser(@RequestBody User user) throws UserNotFoundException {
-        userService.login(user);
+    public ResponseEntity<String> logUser(@RequestBody User user) throws UserNotFoundException {
+        return userService.login(user);
     }
 
     @GetMapping("/logout")
-    public void logOutUser() throws UserAlreadyLoggedOutException {
-        userService.logout();
+    public ResponseEntity<String> logOutUser() throws UserAlreadyLoggedOutException {
+        return userService.logout();
     }
 
     @DeleteMapping("/delete")
-    public void deleteUser(@RequestBody String username) throws
+    public ResponseEntity<String> deleteUser(@RequestBody String username) throws
             UserAlreadyLoggedOutException, UserNotFoundException {
-        userService.delete(username);
+        return userService.delete(username);
     }
 
     @PatchMapping("/pass")
-    public void changePassword(@RequestBody String password) {
-        userService.changePassword(password);
+    public ResponseEntity<String> changePassword(@RequestBody String password) {
+        return userService.changePassword(password);
     }
 
     @PatchMapping("/name")
-    public void changeUsername(@RequestBody String username) {
-        userService.changeUsername(username);
+    public ResponseEntity<String> changeUsername(@RequestBody String username) {
+        return userService.changeUsername(username);
     }
 
     @PostMapping("/type")
