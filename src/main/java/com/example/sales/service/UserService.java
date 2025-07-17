@@ -1,7 +1,9 @@
 package com.example.sales.service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,37 +19,34 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
     @Autowired
     private HttpSession session;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User createUser(User user) {
-        return userRepo.save(user);
+    public void createUser(User user) {
+        userRepository.save(user);
     }
 
     public Optional<User> getUserById(Long id) {
-        return userRepo.findById(id);
+        return userRepository.findById(id);
     }
 
+    @Transactional
     public ResponseEntity<String> signup(User u) throws UserExistsException {
         if (isLoggedIn()) {
             throw new UserAlreadyLoggedInException("User already logged in");
         }
 
-        if (userRepo.findByUsername(u.getUsername()) != null) {
+        if (userRepository.findByUsername(u.getUsername()) != null) {
             throw new UserExistsException("User already exists");
         }
 
-        User toSave = new User(u.getUsername(), u.getEmail(), passwordEncoder.encode(u.getPassword()), u.getType());
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
 
-        session.setAttribute("userId", u.getId());
-        session.setAttribute("username", u.getUsername());
-        session.setMaxInactiveInterval(48 * 3600);
-
-        createUser(toSave);
+        createUser(u);
         return ResponseEntity.ok("Sign Up successful");
     }
 
@@ -59,7 +58,7 @@ public class UserService {
             throw new UserAlreadyLoggedInException("User already logged in");
         }
 
-        User dbUser = userRepo.findByUsername(u.getUsername());
+        User dbUser = userRepository.findByUsername(u.getUsername());
         if (dbUser == null) {
             throw new UserNotFoundException("No user with that username found");
         }
@@ -86,8 +85,34 @@ public class UserService {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+    @Transactional
+    public ResponseEntity<String> delete(String username) throws
+            UserAlreadyLoggedOutException, UserNotFoundException {
+
+        if (isLoggedOut()) {
+            throw new UserAlreadyLoggedInException("User already logged out");
+        }
+
+        User dbUser = userRepository.findByUsername(username);
+        if (dbUser == null) {
+            throw new UserNotFoundException("No user with that username found");
+        }
+
+        userRepository.delete(dbUser);
+
+        session.invalidate();
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .body("User deleted successfully");
+    }
+
     public boolean isLoggedIn() {
         return session.getAttribute("userId") != null;
+    }
+
+    public boolean isLoggedOut() {
+        return session.getAttribute("userId") == null;
     }
 
     public Optional<User> getCurrentUser() {
@@ -97,7 +122,7 @@ public class UserService {
             return Optional.empty();
         }
 
-        return userRepo.findById(userId);
+        return userRepository.findById(userId);
     }
 
     public void changePassword(String newPassword) throws UserAlreadyLoggedOutException {
@@ -108,12 +133,12 @@ public class UserService {
                 new UserAlreadyLoggedOutException("User logged out")
         );
 
-        User user = userRepo.findByUsername(String.valueOf(username));
+        User user = userRepository.findByUsername(String.valueOf(username));
 
         String encodedPassword = passwordEncoder.encode(newPassword);
 
         user.setPassword(encodedPassword);
-        userRepo.save(user);
+        userRepository.save(user);
     }
 
     public void changeUsername(String newUsername) throws UserAlreadyLoggedOutException {
@@ -124,23 +149,23 @@ public class UserService {
                 new UserAlreadyLoggedOutException("User logged out")
         );
 
-        User user = userRepo.findByUsername(String.valueOf(username));
+        User user = userRepository.findByUsername(String.valueOf(username));
 
         if (user == null) {
             throw new UserNotFoundException("User not found");
         }
 
         user.setUsername(newUsername);
-        userRepo.save(user);
+        userRepository.save(user);
         logout();
     }
 
-    public Optional<String> getUserType(String username) {
-        User user = userRepo.findByUsername(username);
+    public Optional<String> getUserRole(String username) {
+        User user = userRepository.findByUsername(username);
         if(user == null) {
             return Optional.empty();
         }
 
-        return Optional.of(user.getType());
+        return Optional.of(user.getRole());
     }
 }

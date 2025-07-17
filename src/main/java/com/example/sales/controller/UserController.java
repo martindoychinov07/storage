@@ -29,9 +29,15 @@ public class UserController {
         userService.login(user);
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public void logOutUser() throws UserAlreadyLoggedOutException {
         userService.logout();
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteUser(@RequestBody String username) throws
+            UserAlreadyLoggedOutException, UserNotFoundException {
+        userService.delete(username);
     }
 
     @PatchMapping("/pass")
@@ -45,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping("/type")
-    public Optional<String> getUserType(@RequestBody String username) {
-        return userService.getUserType(username);
+    public Optional<String> getUserRole(@RequestBody String username) {
+        return userService.getUserRole(username);
     }
 
     @PostMapping("/")

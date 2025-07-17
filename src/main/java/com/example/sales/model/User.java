@@ -21,15 +21,10 @@ public class User {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String email;
-
-    @NonNull
-    @Column(nullable = false)
-    @Getter @Setter
     private String password;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String type;
+    private String role = "customer";
 }
