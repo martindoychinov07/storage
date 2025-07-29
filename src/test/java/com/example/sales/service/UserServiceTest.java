@@ -1,29 +1,25 @@
 package com.example.sales.service;
 
-
-import jakarta.transaction.Transactional;
-import jakarta.servlet.http.HttpSession;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import com.example.sales.exception.UserAlreadyLoggedInException;
-import com.example.sales.exception.UserAlreadyLoggedOutException;
-import com.example.sales.exception.UserExistsException;
+import com.example.sales.exception.*;
 import com.example.sales.model.User;
 import com.example.sales.repository.UserRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
-// A little explanation:
-// I can't use Function with @BeforeEach to sign up and logout
-// because it will execute before every test and that will cause some of them to fail.
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
 public class UserServiceTest {
+
     @Autowired
     private UserService userService;
 
@@ -33,11 +29,10 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-    User userInput = new User("test", "test@email", "pass", "simple");
-
     @Test
     void testSignUpSuccess() {
-        userService.signup(userInput);
+        User user = new User("test", "pass");
+        userService.signup(user);
 
         User found = userRepository.findByUsername("test");
         assertNotNull(found);
@@ -46,29 +41,27 @@ public class UserServiceTest {
 
     @Test
     void testSignUpFailExists() throws UserExistsException {
-        userService.signup(userInput);
-        userService.logout();
+        User user = new User("test", "pass");
+        userService.signup(user);
+
+        User duplicate = new User("test", "pass");
         assertThrows(UserExistsException.class, () -> {
-            userService.signup(userInput);
-        });
-    }
-
-//    the function above also tests the logout function
-
-    @Test
-    void testSignUpFailLoggedIn() throws UserAlreadyLoggedInException {
-        userService.signup(userInput);
-
-        assertThrows(UserAlreadyLoggedInException.class, () -> {
-            userService.signup(userInput);
+            userService.signup(duplicate);
         });
     }
 
     @Test
     void testLoginSuccess() {
-        userService.signup(userInput);
+        User signupUser = new User("test", "pass");
+        userService.signup(signupUser);
+
+        User loginUser = new User("test", "pass");
+        userService.login(loginUser);
+
         userService.logout();
-        userService.login(userInput);
+
+        User loginAgain = new User("test", "pass");
+        userService.login(loginAgain);
 
         Object userId = session.getAttribute("userId");
         Object username = session.getAttribute("username");
@@ -78,22 +71,69 @@ public class UserServiceTest {
     }
 
     @Test
-    void testLogInAlreadyLoggedIn() throws UserAlreadyLoggedInException {
-        userService.signup(userInput);
-        userService.logout();
-        userService.login(userInput);
+    void testLogInAlreadyLoggedIn() {
+        User signupUser = new User("test", "pass");
+        userService.signup(signupUser);
 
+        User loginUser = new User("test", "pass");
+        userService.login(loginUser);
+
+        User loginAgain = new User("test", "pass");
         assertThrows(UserAlreadyLoggedInException.class, () -> {
-            userService.login(userInput);
+            userService.login(loginAgain);
         });
     }
 
     @Test
-    void testLogOutAlreadyLoggedOut() throws UserAlreadyLoggedOutException {
-        userService.signup(userInput);
+    void testLogOutAlreadyLoggedOut() {
+        User user = new User("test", "pass");
+        userService.signup(user);
+
+        User loginUser = new User("test", "pass");
+        userService.login(loginUser);
+
         userService.logout();
+
         assertThrows(UserAlreadyLoggedOutException.class, () -> {
             userService.logout();
         });
     }
+
+    @Test
+    void testDeleteUserSuccess() throws Exception {
+        // Sign up and login
+        User signupUser = new User("test", "pass");
+        userService.signup(signupUser);
+
+        User loginUser = new User("test", "pass");
+        userService.login(loginUser);
+
+        // Delete user
+        ResponseEntity<String> response = userService.delete("test");
+
+        assertEquals("User deleted successfully", response.getBody());
+        assertTrue(userService.isLoggedOut()); // session should be invalidated
+
+        // Verify user is deleted
+        assertNull(userRepository.findByUsername("test"));
+    }
+
+    @Test
+    void testDeleteUserFailsWhenLoggedOut() throws Exception {
+        // Sign up and login
+        User signupUser = new User("test", "pass");
+        userService.signup(signupUser);
+
+        User loginUser = new User("test", "pass");
+        userService.login(loginUser);
+
+        // Logout first
+        userService.logout();
+
+        // Now try to delete while logged out
+        assertThrows(UserAlreadyLoggedOutException.class, () -> {
+            userService.delete("test");
+        });
+    }
+
 }

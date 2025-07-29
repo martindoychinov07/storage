@@ -6,49 +6,44 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "partner")
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "document")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-public class Partner {
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
+    @Getter
     private long id;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private LocalDateTime version = LocalDateTime.now();;
+    private LocalDateTime docDate = LocalDateTime.now();
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String code;
-
-    @NonNull
-    @Column(nullable = false, unique = true)
-    @Getter @Setter
-    private String name;
+    private long docType;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String address;
+    private String docNumber;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String phone;
+    private long supplierId;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String responsible;
+    private long customerId;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String account;
+    private long payment;
 
     @NonNull
     @Column(nullable = false)
@@ -58,10 +53,25 @@ public class Partner {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
+    private long userId;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private long availability;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
     private Boolean deleted;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean active = true;
+    private String reference;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private long partnerLogId;
 }

@@ -90,7 +90,7 @@ public class UserService {
             UserAlreadyLoggedOutException, UserNotFoundException {
 
         if (isLoggedOut()) {
-            throw new UserAlreadyLoggedInException("User already logged out");
+            throw new UserAlreadyLoggedOutException("User already logged out");
         }
 
         User dbUser = userRepository.findByUsername(username);

@@ -21,7 +21,7 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    User userInput = new User(USER_NAME_1, USER_EMAIL, USER_PASSWORD, USER_ROLE);
+    User userInput = new User(USER_NAME_1, USER_PASSWORD);
 
     @Test
     void testSaveAndFindByUsername() {
@@ -31,7 +31,6 @@ public class UserRepositoryTest {
 
         assertNotNull(found);
         assertEquals(USER_NAME_1, found.getUsername());
-        assertEquals(USER_EMAIL, found.getEmail());
     }
 
     @Test

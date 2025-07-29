@@ -36,6 +36,26 @@ public class GlobalExceptionHandler {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PartnerNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlePartnerNotFound(PartnerNotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PartnerAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handlePartnerAlreadyExists(PartnerAlreadyExistsException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleItemNotFound(ItemNotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ItemAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleItemAlreadyExists(ItemAlreadyExistsException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleAllOtherExceptions(Exception ex) {
         ex.printStackTrace();

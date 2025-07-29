@@ -1,5 +1,6 @@
 package com.example.sales.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +37,9 @@ public class PartnerController {
     public List<Partner> getAllPartners() {
         return partnerService.getAllPartners();
     }
+
+//    @PostMapping("/name")
+//    public ResponseEntity<String> changePartnerName(@RequestBody PartnerEditRequest partnerEditRequest) {
+//        return partnerService.changePartnerName(partnerEditRequest);
+//    }
 }

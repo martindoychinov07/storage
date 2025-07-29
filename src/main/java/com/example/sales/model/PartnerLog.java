@@ -6,13 +6,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "partner")
+@Table(name = "partner_log")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @RequiredArgsConstructor
-public class Partner {
+public class PartnerLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
+    @Getter
     private long id;
 
     @NonNull
@@ -26,7 +26,7 @@ public class Partner {
     private String code;
 
     @NonNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Getter @Setter
     private String name;
 
@@ -63,5 +63,5 @@ public class Partner {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean active = true;
+    private long refId;
 }

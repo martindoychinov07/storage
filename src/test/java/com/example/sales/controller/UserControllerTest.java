@@ -21,7 +21,7 @@ public class UserControllerTest {
     @Mock
     private UserService userService;
 
-    User userInput = new User("test", "test@email", "pass", "simple");
+    User userInput = new User("test", "pass");
     Long userId = 1L;
 
 

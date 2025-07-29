@@ -6,7 +6,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.sales.exception.*;
@@ -31,29 +34,37 @@ public class PartnerService {
         return ResponseEntity.ok("Partner created successfully");
     }
 
-    public ResponseEntity<String> editPartner(PartnerEditRequest partnerEditRequest) throws PartnerNotFoundException {
-        Partner check = partnerRepository.findByName(partnerEditRequest.getCurrentName());
+    public ResponseEntity<String> editPartner(PartnerEditRequest partnerEditRequest)
+            throws PartnerNotFoundException, PartnerAlreadyExistsException {
+        Partner oldPartner = partnerRepository.findByName(partnerEditRequest.getCurrentName());
 
-        if(check == null) {
+        if(oldPartner == null) {
             throw new PartnerNotFoundException("Partner not found");
         }
 
-        BeanUtils.copyProperties(partnerEditRequest.getPartner(), check);
+        Partner newPartner = partnerRepository.findByName(partnerEditRequest.getPartner().getName());
 
-        partnerRepository.save(check);
+        if(newPartner != null) {
+            throw new PartnerAlreadyExistsException("Partner already exists");
+        }
+
+        BeanUtils.copyProperties(partnerEditRequest.getPartner(), oldPartner, "id");
+        oldPartner.setVersion(LocalDateTime.now());
+
+        partnerRepository.save(oldPartner);
 
         return ResponseEntity.ok("Partner updated successfully");
     }
 
     @Transactional
     public ResponseEntity<String> deletePartner(String name) throws PartnerNotFoundException {
-        Partner partner = partnerRepository.findByName(name);
+        Partner check = partnerRepository.findByName(name);
 
-        if(partner == null) {
+        if(check == null) {
             throw new PartnerNotFoundException("No such partner found");
         }
 
-        partnerRepository.delete(partner);
+        partnerRepository.delete(check);
 
         return ResponseEntity.ok("Partner deleted successfully");
     }
@@ -61,4 +72,32 @@ public class PartnerService {
     public List<Partner> getAllPartners() {
         return partnerRepository.findAll();
     }
+
+//    public ResponseEntity<String> changePartnerName(PartnerEditRequest partnerEditRequest)
+//            throws PartnerNotFoundException, PartnerAlreadyExistsException {
+//
+//        Partner oldPartner = partnerRepository.findByName(partnerEditRequest.getCurrentName());
+//
+//        if(oldPartner == null) {
+//            throw new PartnerNotFoundException("Partner not found");
+//        }
+//
+//        Partner check = partnerRepository.findByName(partnerEditRequest.getPartner().getName());
+//
+//        if(check != null && check.getActive()) {
+//            throw new PartnerAlreadyExistsException("Partner already exists or inactive");
+//        }
+//
+//        check = new Partner();
+//
+//        BeanUtils.copyProperties(partnerEditRequest.getPartner(), check, "id");
+//        System.out.println(check.getName());
+//
+//        oldPartner.setActive(false);
+//
+//        partnerRepository.save(check);
+//        partnerRepository.save(oldPartner);
+//
+//        return ResponseEntity.ok("Name changed");
+//    }
 }

@@ -3,13 +3,11 @@ package com.example.sales.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "partner")
+@Table(name = "operation")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @RequiredArgsConstructor
-public class Partner {
+public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
@@ -18,50 +16,65 @@ public class Partner {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private LocalDateTime version = LocalDateTime.now();;
+    private long docId;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String code;
-
-    @NonNull
-    @Column(nullable = false, unique = true)
-    @Getter @Setter
-    private String name;
+    private long row;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String address;
+    private String wareId;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String phone;
+    private String wareCode;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String responsible;
+    private String wareNote;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String account;
+    private String wareName;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String note;
+    private double packageVar;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean deleted;
+    private String measure;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean active = true;
+    private long quantity;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private double price;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private double discount;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private double tax;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private long available;
 }
