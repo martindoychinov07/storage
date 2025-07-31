@@ -32,16 +32,6 @@ public class ItemLog {
     private String name;
 
     @NonNull
-    @Column(nullable = false, unique = true)
-    @Getter @Setter
-    private Integer quantity;
-
-    @NonNull
-    @Column(nullable = false, unique = true)
-    @Getter @Setter
-    private Integer price;
-
-    @NonNull
     @Column(nullable = false)
     @Getter @Setter
     private Boolean deleted;
@@ -50,9 +40,4 @@ public class ItemLog {
     @Column(nullable = false)
     @Getter @Setter
     private long refId;
-
-    @NonNull
-    @Column(nullable = false)
-    @Getter @Setter
-    private long docId;
 }

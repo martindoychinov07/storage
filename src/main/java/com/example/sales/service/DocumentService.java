@@ -1,15 +1,11 @@
 package com.example.sales.service;
 
-import com.example.sales.DTO.PartnerEditRequest;
 import com.example.sales.exception.PartnerAlreadyExistsException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.example.sales.model.Document;
 import com.example.sales.model.PartnerLog;
@@ -76,7 +72,7 @@ public class DocumentService {
 
 
         Document document = documentCreateRequest.getDocument();
-        document.setPartnerLogId(partnerLog.getId());
+        document.setCustomerId(partnerLog.getId());
         documentRepository.save(document);
 
         return ResponseEntity.ok("Document created");

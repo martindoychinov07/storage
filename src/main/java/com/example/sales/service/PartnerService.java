@@ -44,7 +44,7 @@ public class PartnerService {
 
         Partner newPartner = partnerRepository.findByName(partnerEditRequest.getPartner().getName());
 
-        if(newPartner != null) {
+        if(newPartner != null && !newPartner.getName().equals(partnerEditRequest.getPartner().getName())) {
             throw new PartnerAlreadyExistsException("Partner already exists");
         }
 

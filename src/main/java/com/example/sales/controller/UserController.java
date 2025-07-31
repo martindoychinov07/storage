@@ -18,7 +18,7 @@ import com.example.sales.service.UserService;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @PostMapping("/signup")
     public void createUser(@RequestBody User user) throws UserExistsException {

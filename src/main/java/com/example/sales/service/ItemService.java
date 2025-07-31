@@ -57,7 +57,7 @@ public class ItemService {
 
         Item newItem = itemRepository.findByName(itemEditRequest.getItem().getName());
 
-        if (newItem != null) {
+        if (newItem != null && !newItem.getName().equals(itemEditRequest.getCurrentName())) {
             throw new ItemAlreadyExistsException("Item already exists");
         }
 

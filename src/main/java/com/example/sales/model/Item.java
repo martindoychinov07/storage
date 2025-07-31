@@ -32,17 +32,17 @@ public class Item {
     private String name;
 
     @NonNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Getter @Setter
-    private Integer quantity;
-
-    @NonNull
-    @Column(nullable = false, unique = true)
-    @Getter @Setter
-    private Integer price;
+    private Boolean deleted;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean deleted;
+    private Integer available;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private Integer price;
 }

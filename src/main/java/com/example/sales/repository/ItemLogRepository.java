@@ -8,5 +8,5 @@ import com.example.sales.model.Item;
 
 @Repository
 public interface ItemLogRepository extends JpaRepository<ItemLog, Long> {
-    Item findByName(String name);
+    ItemLog findByName(String name);
 }

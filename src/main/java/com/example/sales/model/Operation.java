@@ -26,22 +26,12 @@ public class Operation {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String wareId;
+    private long itemLogId;
 
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String wareCode;
-
-    @NonNull
-    @Column(nullable = false)
-    @Getter @Setter
-    private String wareNote;
-
-    @NonNull
-    @Column(nullable = false)
-    @Getter @Setter
-    private String wareName;
+    private String itemNote;
 
     @NonNull
     @Column(nullable = false)

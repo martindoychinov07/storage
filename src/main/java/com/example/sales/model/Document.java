@@ -33,16 +33,6 @@ public class Document {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private long supplierId;
-
-    @NonNull
-    @Column(nullable = false)
-    @Getter @Setter
-    private long customerId;
-
-    @NonNull
-    @Column(nullable = false)
-    @Getter @Setter
     private long payment;
 
     @NonNull
@@ -73,5 +63,10 @@ public class Document {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private long partnerLogId;
+    private long supplierId;
+
+    @NonNull
+    @Column(nullable = false)
+    @Getter @Setter
+    private long customerId;
 }
