@@ -44,5 +44,5 @@ public class Item {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Integer price;
+    private double price;
 }

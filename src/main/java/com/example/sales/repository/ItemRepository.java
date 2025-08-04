@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.example.sales.model.Item;
 
+import java.util.List;
+
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Item findByName(String name);
+    List<Item> findByDeletedFalse();
 }

@@ -11,6 +11,7 @@ import com.example.sales.exception.ItemAlreadyExistsException;
 import com.example.sales.exception.ItemNotFoundException;
 import com.example.sales.repository.ItemLogRepository;
 import com.example.sales.repository.ItemRepository;
+import com.example.sales.model.ItemLog;
 
 import java.util.List;
 
@@ -27,7 +28,13 @@ public class ItemService {
             throw new ItemAlreadyExistsException("Item already exists");
         }
 
+        ItemLog itemLog = new ItemLog();
+        BeanUtils.copyProperties(item, itemLog, "id");
+
         itemRepository.save(item);
+        itemLog.setRefId(item.getId());
+        System.out.println(item.getId());
+        itemLogRepository.save(itemLog);
 
         return ResponseEntity.ok("Item added");
     }
@@ -38,13 +45,15 @@ public class ItemService {
             throw new ItemNotFoundException("Item not found");
         }
 
-        itemRepository.delete(item);
+        item.setDeleted(true);
+
+        itemRepository.save(item);
 
         return ResponseEntity.ok("Item deleted");
     }
 
     public List<Item> getAllItems() {
-        return itemRepository.findAll();
+        return itemRepository.findByDeletedFalse();
     }
 
     public ResponseEntity<String> editItem(ItemEditRequest itemEditRequest)
@@ -65,5 +74,9 @@ public class ItemService {
         itemRepository.save(oldItem);
 
         return ResponseEntity.ok("Item updated");
+    }
+
+    public List<ItemLog> getAllItemLogs(long itemId) {
+        return itemLogRepository.findByRefId(itemId);
     }
 }

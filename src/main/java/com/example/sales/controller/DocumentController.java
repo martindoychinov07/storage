@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import com.example.sales.service.DocumentService;
 import com.example.sales.model.Document;
 
-@CrossOrigin(origins = "http://localhost:4200")
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/document")
 public class DocumentController {
@@ -18,5 +20,10 @@ public class DocumentController {
     @PostMapping("/create")
     public ResponseEntity<String> createDocument(@RequestBody DocumentCreateRequest documentCreateRequest) {
         return documentService.createDocument(documentCreateRequest);
+    }
+
+    @GetMapping("/all")
+    public List<Document> getAllDocuments() {
+        return documentService.getAllDocuments();
     }
 }

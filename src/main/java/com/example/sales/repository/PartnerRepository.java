@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.example.sales.model.Partner;
 
+import java.util.List;
+
 @Repository
 public interface PartnerRepository extends JpaRepository<Partner, Long> {
     Partner findByName(String name);
+    List<Partner> findByDeletedFalse();
 }

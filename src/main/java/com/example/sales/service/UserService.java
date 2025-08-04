@@ -13,13 +13,14 @@ import com.example.sales.exception.*;
 import com.example.sales.model.User;
 import com.example.sales.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
     private HttpSession session;
@@ -176,5 +177,9 @@ public class UserService {
         }
 
         return Optional.of(user.getRole());
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

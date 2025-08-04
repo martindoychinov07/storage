@@ -1,5 +1,6 @@
 package com.example.sales.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import com.example.sales.exception.UserNotFoundException;
 import com.example.sales.model.User;
 import com.example.sales.service.UserService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -60,6 +61,11 @@ public class UserController {
     public Optional<User> getUserById(@RequestBody String idStr) {
         Long id = Long.parseLong(idStr.trim());
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 }
 

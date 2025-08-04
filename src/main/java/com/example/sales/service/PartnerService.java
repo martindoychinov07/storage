@@ -19,7 +19,7 @@ import com.example.sales.model.Partner;
 @Service
 public class PartnerService {
     @Autowired
-    private PartnerRepository partnerRepository;
+    PartnerRepository partnerRepository;
 
     @Transactional
     public ResponseEntity<String> addPartner(Partner partner) throws PartnerAlreadyExistsException{
@@ -70,7 +70,7 @@ public class PartnerService {
     }
 
     public List<Partner> getAllPartners() {
-        return partnerRepository.findAll();
+        return partnerRepository.findByDeletedFalse();
     }
 
 //    public ResponseEntity<String> changePartnerName(PartnerEditRequest partnerEditRequest)

@@ -17,6 +17,8 @@ import com.example.sales.model.Partner;
 import com.example.sales.exception.PartnerNotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Service
 public class DocumentService {
     @Autowired
@@ -78,4 +80,7 @@ public class DocumentService {
         return ResponseEntity.ok("Document created");
     }
 
+    public List<Document> getAllDocuments() {
+        return documentRepository.findAll();
+    }
 }

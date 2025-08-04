@@ -18,17 +18,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAlreadyLoggedInException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyLoggedIn(UserAlreadyLoggedInException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserAlreadyLoggedOutException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyLoggedOut(UserAlreadyLoggedOutException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserExists(UserExistsException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PartnerAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handlePartnerAlreadyExists(PartnerAlreadyExistsException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ItemNotFoundException.class)
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ItemAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleItemAlreadyExists(ItemAlreadyExistsException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
