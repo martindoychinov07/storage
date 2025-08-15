@@ -34,7 +34,7 @@ public class Item {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean deleted;
+    private Boolean deleted = false;
 
     @NonNull
     @Column(nullable = false)

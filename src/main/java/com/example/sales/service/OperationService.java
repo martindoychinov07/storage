@@ -1,5 +1,6 @@
 package com.example.sales.service;
 
+import com.example.sales.exception.ItemNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,9 @@ import com.example.sales.repository.ItemLogRepository;
 import com.example.sales.DTO.AddOperationRequest;
 import com.example.sales.model.ItemLog;
 import com.example.sales.repository.OperationRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OperationService {
     @Autowired
     ItemLogRepository itemLogRepository;
@@ -20,12 +23,13 @@ public class OperationService {
     @Autowired
     ItemLogService itemLogService;
 
-    public ResponseEntity<String> createOperation(AddOperationRequest addOperationRequest) {
-        ItemLog itemLog = itemLogRepository.findByName(addOperationRequest.getItemLog().getName());
+    public ResponseEntity<String> createOperation(AddOperationRequest addOperationRequest)
+            throws ItemNotFoundException {
+        ItemLog itemLog = itemLogRepository.findByName(addOperationRequest.getItemLogName());
 
-//        if (itemLog == null) {
-//            itemLog = itemLogService.createItemLog(addOperationRequest.getItemLog());
-//        }
+        if (itemLog == null) {
+            throw new ItemNotFoundException("ItemLog not found");
+        }
 
         Operation newOperation = new Operation();
         BeanUtils.copyProperties(addOperationRequest.getOperation(), newOperation);

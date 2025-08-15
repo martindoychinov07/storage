@@ -11,6 +11,7 @@ import com.example.sales.repository.ItemLogRepository;
 import com.example.sales.model.ItemLog;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -44,5 +45,10 @@ public class ItemController {
     @GetMapping("/logs")
     public List<ItemLog> getAllItemLogs(@RequestParam long itemId) {
         return itemService.getAllItemLogs(itemId);
+    }
+
+    @GetMapping("/id")
+    public Optional<Item> getById(@RequestParam long id) {
+        return itemService.getById(id);
     }
 }

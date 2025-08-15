@@ -26,5 +26,5 @@ public class User {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private String role = "customer";
+    private String role = "user";
 }

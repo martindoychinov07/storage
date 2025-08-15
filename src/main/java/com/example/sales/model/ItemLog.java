@@ -16,7 +16,6 @@ public class ItemLog {
     @Setter
     private long id;
 
-    @NonNull
     @Column(nullable = false)
     @Getter @Setter
     private LocalDateTime version = LocalDateTime.now();;
@@ -34,7 +33,7 @@ public class ItemLog {
     @NonNull
     @Column(nullable = false)
     @Getter @Setter
-    private Boolean deleted;
+    private Boolean deleted = false;
 
     @NonNull
     @Column(nullable = false)

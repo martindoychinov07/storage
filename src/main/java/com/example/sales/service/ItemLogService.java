@@ -13,6 +13,8 @@ import com.example.sales.exception.ItemNotFoundException;
 import com.example.sales.model.Item;
 import com.example.sales.repository.ItemRepository;
 
+import java.util.List;
+
 @Service
 public class ItemLogService {
     @Autowired
@@ -44,5 +46,9 @@ public class ItemLogService {
         itemLogRepository.save(newItemLog);
 
         return ResponseEntity.ok("New Item Log created");
+    }
+
+    public List<ItemLog> getAllLogs() {
+        return itemLogRepository.findAll();
     }
 }

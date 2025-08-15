@@ -8,6 +8,8 @@ import com.example.sales.model.ItemLog;
 import com.example.sales.service.ItemLogService;
 import com.example.sales.DTO.ItemLogRequest;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/itemLog")
@@ -18,5 +20,10 @@ public class ItemLogController {
     @PostMapping("/add")
     public ResponseEntity<String> createItemLog(@RequestBody ItemLogRequest itemLogRequest) {
         return itemLogService.createItemLog(itemLogRequest);
+    }
+
+    @GetMapping("/all")
+    public List<ItemLog> getAllLogs() {
+        return itemLogService.getAllLogs();
     }
 }

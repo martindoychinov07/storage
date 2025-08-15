@@ -34,7 +34,7 @@ public class DocumentService {
     PartnerService partnerService;
 
     @Transactional
-    public ResponseEntity<String> createDocument(@RequestBody DocumentCreateRequest documentCreateRequest)
+    public ResponseEntity<String> createDocument(DocumentCreateRequest documentCreateRequest)
             throws PartnerAlreadyExistsException, PartnerNotFoundException {
         Partner partner = partnerRepository.findByName(String.valueOf(documentCreateRequest.getName()));
 

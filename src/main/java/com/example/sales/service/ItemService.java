@@ -14,6 +14,7 @@ import com.example.sales.repository.ItemRepository;
 import com.example.sales.model.ItemLog;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -78,5 +79,9 @@ public class ItemService {
 
     public List<ItemLog> getAllItemLogs(long itemId) {
         return itemLogRepository.findByRefId(itemId);
+    }
+
+    public Optional<Item> getById(long id) {
+        return itemRepository.findById(id);
     }
 }
